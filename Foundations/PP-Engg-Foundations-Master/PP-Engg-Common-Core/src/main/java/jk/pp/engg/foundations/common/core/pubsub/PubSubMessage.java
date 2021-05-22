@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.pp.engg.foundations.common.core.domain.IDomain;
+import jk.pp.engg.foundations.common.core.util.AppGlobalObjects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +19,8 @@ public class PubSubMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
 	static {
-		OBJECT_MAPPER.setSerializationInclusion(Include.NON_NULL);
+		AppGlobalObjects.OBJECT_MAPPER.setSerializationInclusion(Include.NON_NULL);
 	}
 
 	private Long pk;
@@ -31,7 +29,7 @@ public class PubSubMessage implements Serializable {
 
 	public String generateMessageAsJson() {
 		try {
-			return OBJECT_MAPPER.writeValueAsString(this);
+			return AppGlobalObjects.OBJECT_MAPPER.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
 
 			throw new RuntimeException(e);
