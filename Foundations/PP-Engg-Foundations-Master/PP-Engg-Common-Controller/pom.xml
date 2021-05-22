@@ -11,4 +11,16 @@
 	<artifactId>PP-Engg-Common-Controller</artifactId>
 	<packaging>jar</packaging>
 	<name>PP-Engg-Common-Controller</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jk.provider.portal.engineering.foundations</groupId>
+			<artifactId>PP-Engg-Common-Service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

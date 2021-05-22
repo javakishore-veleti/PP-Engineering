@@ -13,16 +13,6 @@
 	<name>PP-Engg-Common-Service</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>jk.provider.portal.engineering.foundations</groupId>
-			<artifactId>PP-Engg-Common-Core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>jk.provider.portal.engineering.foundations</groupId>
 			<artifactId>PP-Engg-Common-DAO</artifactId>
 			<version>${project.version}</version>
