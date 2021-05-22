@@ -5,5 +5,9 @@ public interface IDomain {
 	Long getPk();
 
 	void setPk(Long pk);
+	
+	String getStatus();
+	
+	void setStatus(String status);
 
 }
