@@ -1,4 +1,4 @@
-package jk.pp.engg.foundations.common.core.dto;
+package jk.pp.engg.foundations.common.core.dto.entitlements;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
