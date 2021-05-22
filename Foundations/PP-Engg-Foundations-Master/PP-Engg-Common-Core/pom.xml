@@ -11,4 +11,11 @@
 	<artifactId>PP-Engg-Common-Core</artifactId>
 	<packaging>jar</packaging>
 	<name>PP-Engg-Common-Core</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>
