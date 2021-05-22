@@ -11,4 +11,11 @@
 	<artifactId>PP-Engg-Common-Domain</artifactId>
 	<packaging>jar</packaging>
 	<name>PP-Engg-Common-Domain</name>
+	<dependencies>
+		<dependency>
+			<groupId>jk.provider.portal.engineering.foundations</groupId>
+			<artifactId>PP-Engg-Common-Core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>
