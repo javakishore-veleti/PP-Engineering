@@ -9,9 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.CrudResultDTO;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubConfig;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubKey;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubMessage;
@@ -19,11 +16,14 @@ import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.engg.foundations.common.core.util.AppGlobalCtxAware;
 import jk.pp.engg.foundations.common.core.util.FileUtil;
 import jk.pp.engg.foundations.common.dao.core.AppCrudDAO;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.CrudResultDTO;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 import jk.pp.engg.foundations.common.service.core.pubsub.PubSubProducerService;
 import lombok.Data;
 
 @Data
-public abstract class AppCrudServiceImpl<T extends IDomain, DTO extends DomainCrudDTO<T>>
+public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends DomainCrudDTO<T>>
 		implements AppCrudService<T, DTO> {
 
 	@Autowired

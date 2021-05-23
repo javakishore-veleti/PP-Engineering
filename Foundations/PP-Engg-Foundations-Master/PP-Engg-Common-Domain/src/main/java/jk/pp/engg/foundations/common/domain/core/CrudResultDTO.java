@@ -1,8 +1,7 @@
-package jk.pp.engg.foundations.common.core.dto;
+package jk.pp.engg.foundations.common.domain.core;
 
 import java.util.List;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CrudResultDTO<T extends IDomain> {
+public class CrudResultDTO<T extends BaseDomain> {
 
 	private String domainName;
 	private Long pk;

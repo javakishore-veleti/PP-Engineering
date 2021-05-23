@@ -3,7 +3,6 @@ package jk.pp.engg.foundations.common.domain.core;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import jk.pp.engg.foundations.common.core.domain.IDomainUniqueNameDesc;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseDomainUniqueNameDesc extends BaseDomain implements IDomainUniqueNameDesc {
+public class BaseDomainUniqueNameDesc extends BaseDomain {
 
 	private static final long serialVersionUID = 1L;
 

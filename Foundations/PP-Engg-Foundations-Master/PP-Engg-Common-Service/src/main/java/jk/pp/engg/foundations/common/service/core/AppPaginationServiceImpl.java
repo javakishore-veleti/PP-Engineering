@@ -6,12 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
 import jk.pp.engg.foundations.common.core.util.AppDBConstants;
 import jk.pp.engg.foundations.common.dao.core.AppPaginationRepo;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 
-public abstract class AppPaginationServiceImpl<T extends IDomain, DTO extends DomainCrudDTO<T>>
+public abstract class AppPaginationServiceImpl<T extends BaseDomain, DTO extends DomainCrudDTO<T>>
 		implements AppPaginationService<T, DTO> {
 
 	private AppPaginationRepo<T> daoRepo;

@@ -24,4 +24,8 @@ public class AppGlobalProperties {
 	@Value("${pp.platform.microservices.security.enabled:false}")
 	private Boolean securityEnabledVal = Boolean.FALSE;
 
+	public boolean isSecurityEnabled() {
+		return this.securityEnabledVal;
+	}
+
 }

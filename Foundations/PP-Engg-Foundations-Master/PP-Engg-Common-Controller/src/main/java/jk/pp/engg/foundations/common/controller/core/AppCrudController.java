@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.CrudResultDTO;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.CrudResultDTO;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 import jk.pp.engg.foundations.common.service.core.AppCrudService;
 
-public abstract class AppCrudController<T extends IDomain, DTO extends DomainCrudDTO<T>> {
+public class AppCrudController<T extends BaseDomain, DTO extends DomainCrudDTO<T>> {
 
 	private AppCrudService<T, DTO> crudService;
 
@@ -46,7 +46,7 @@ public abstract class AppCrudController<T extends IDomain, DTO extends DomainCru
 		return ResponseEntity.ok(result);
 	}
 
-	@RequestMapping(path = "find-by-pk/{pk}")
+	//@RequestMapping(path = "find-by-pk/{pk}")
 	public ResponseEntity<CrudResultDTO<T>> findByPK(@PathVariable Long pk) throws Exception {
 		CrudResultDTO<T> result = this.crudService.findByPK(pk);
 		return ResponseEntity.ok(result);

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 import jk.pp.engg.foundations.common.service.core.AppPaginationService;
 
-public abstract class AppPaginationController<T extends IDomain, DTO extends DomainCrudDTO<T>> {
+public abstract class AppPaginationController<T extends BaseDomain, DTO extends DomainCrudDTO<T>> {
 
 	@Autowired
 	private ModelMapper modelMapper;

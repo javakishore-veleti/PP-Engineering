@@ -112,11 +112,11 @@
 		</dependencies>
 	</dependencyManagement>
 	<modules>
-		<module>PP-Engg-Common-Libs</module>
+		<module>PP-Engg-Common-Core</module>
+		<module>PP-Engg-Common-Domain</module>
 		<module>PP-Engg-Common-DAO</module>
 		<module>PP-Engg-Common-Service</module>
 		<module>PP-Engg-Common-Controller</module>
-		<module>PP-Engg-Common-Core</module>
-		<module>PP-Engg-Common-Domain</module>
+		<module>PP-Engg-Common-Libs</module>
 	</modules>
 </project>

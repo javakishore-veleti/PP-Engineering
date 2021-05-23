@@ -7,12 +7,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.CrudResultDTO;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.CrudResultDTO;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 
 @NoRepositoryBean
-public interface AppCrudDAO<T extends IDomain> extends CrudRepository<T, Long> {
+public interface AppCrudDAO<T extends BaseDomain> extends CrudRepository<T, Long> {
 
 	default CrudResultDTO<T> create(DomainCrudDTO<T> crudDTO) throws Exception {
 		T domain = this.save(crudDTO.getDomain());

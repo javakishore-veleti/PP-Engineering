@@ -1,10 +1,10 @@
 package jk.pp.engg.foundations.common.service.core;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
-import jk.pp.engg.foundations.common.core.dto.CrudResultDTO;
-import jk.pp.engg.foundations.common.core.dto.DomainCrudDTO;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
+import jk.pp.engg.foundations.common.domain.core.CrudResultDTO;
+import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
 
-public interface AppCrudService<T extends IDomain, DTO extends DomainCrudDTO<T>> {
+public interface AppCrudService<T extends BaseDomain, DTO extends DomainCrudDTO<T>> {
 
 	default String getDomainClassName() {
 		return null;

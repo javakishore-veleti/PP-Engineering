@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import jk.pp.engg.foundations.common.core.domain.IDomain;
+import jk.pp.engg.foundations.common.domain.core.BaseDomain;
 
 @NoRepositoryBean
-public interface AppPaginationRepo<T extends IDomain>
+public interface AppPaginationRepo<T extends BaseDomain>
 		extends JpaRepository<T, Long>, PagingAndSortingRepository<T, Long> {
 
 	default Page<T> getPaginatedData(Pageable pageReq) throws Exception {
