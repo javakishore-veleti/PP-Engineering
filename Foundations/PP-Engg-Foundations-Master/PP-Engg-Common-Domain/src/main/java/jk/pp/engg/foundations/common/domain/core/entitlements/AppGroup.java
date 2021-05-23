@@ -5,8 +5,12 @@ import javax.persistence.Table;
 
 import jk.pp.engg.foundations.common.core.domain.entitlements.IAppGroup;
 import jk.pp.engg.foundations.common.domain.core.BaseDomainUniqueNameDesc;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity(name = "AppGroup")
 @Table(name = "app_group")
