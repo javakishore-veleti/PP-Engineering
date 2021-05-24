@@ -60,6 +60,11 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 	@PostConstruct
 	public void postContruct() throws Exception {
 
+		System.out.println("crudServiceImplRefId -> " + this.crudServiceImplRefId);
+		System.out.println("postContruct pubSubToipcsGlobalEnabled -> " + this.globalProps.pubSubToipcsGlobalEnabled);
+		System.out.println("postContruct pubSubToipcsGlobalJsonKey -> " + this.globalProps.pubSubToipcsGlobalJsonKey);
+		System.out.println("postContruct crudServiceImplRefId -> " + this.crudServiceImplRefId);
+
 		if (this.globalProps.pubSubToipcsGlobalEnabled) {
 
 			this.enableCrudEventsToPubSub = Boolean.TRUE;
@@ -78,7 +83,11 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	public void initializePubSubConfigs() throws Exception {
 
+		System.out.println("initializePubSubConfigs enableCrudEventsToPubSub -> " + this.enableCrudEventsToPubSub);
+
 		if (enableCrudEventsToPubSub == Boolean.FALSE) {
+
+			System.out.println("initializePubSubConfigs Exiting so no messages will be published");
 			return;
 		}
 
@@ -180,6 +189,8 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	private void checkPubSubAndPublish(Integer crudEvent, CrudResultDTO<T> resultDTO) throws Exception {
 
+		System.out.println("enableCrudEventsToPubSub -> " + enableCrudEventsToPubSub);
+		System.out.println("this.pubSubConfig -> " + this.pubSubConfig);
 		if (enableCrudEventsToPubSub == Boolean.FALSE || this.pubSubConfig == null) {
 			return;
 		}
@@ -187,6 +198,8 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		PubSubTopic pubSubTopic = null;
 		PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> producerSvc = null;
 		String eventType = null;
+
+		System.out.println("crudEvent -> " + crudEvent);
 
 		switch (crudEvent) {
 		case 1:
@@ -212,6 +225,8 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		default:
 			break;
 		}
+
+		System.out.println("producerSvc -> " + producerSvc);
 
 		if (producerSvc != null) {
 

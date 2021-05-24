@@ -69,7 +69,7 @@ public abstract class AppCrudController<T extends BaseDomain, DTO extends Domain
 	public ResponseEntity<CrudResultDTO<T>> populateInitialData() throws Exception {
 		List<DTO> domains = populateInitialDataDomais();
 
-		domains.stream().anyMatch(aDomainDTO -> {
+		domains.stream().allMatch(aDomainDTO -> {
 			try {
 				this.crudService.create(aDomainDTO);
 			} catch (Exception e) {

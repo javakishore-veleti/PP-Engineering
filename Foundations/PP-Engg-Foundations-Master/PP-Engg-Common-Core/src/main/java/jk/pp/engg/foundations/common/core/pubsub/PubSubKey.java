@@ -38,4 +38,11 @@ public class PubSubKey {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "PubSubKey [topic=" + topic + ", domainName=" + domainName + ", eventType=" + eventType + ", pk=" + pk
+				+ ", key=" + key + ", partition=" + partition + ", partitoinVal=" + partitoinVal + ", addlData="
+				+ addlData + "]";
+	}
+
 }

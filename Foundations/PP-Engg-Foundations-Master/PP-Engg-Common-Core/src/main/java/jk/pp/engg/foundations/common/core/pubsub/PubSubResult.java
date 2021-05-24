@@ -78,4 +78,12 @@ public class PubSubResult implements Serializable {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "PubSubResult [json=" + json + ", success=" + success + ", pubSubAck=" + pubSubAck + ", topic=" + topic
+				+ ", pk=" + pk + ", domain=" + domain + ", domains=" + domains + ", message=" + message + ", messages="
+				+ messages + ", ctxData=" + ctxData + "]";
+	}
+
 }

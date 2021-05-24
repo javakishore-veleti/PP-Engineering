@@ -38,4 +38,9 @@ public class PubSubMessage implements Serializable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "PubSubMessage [topic=" + topic + ", pk=" + pk + ", domain=" + domain + ", addlData=" + addlData + "]";
+	}
+
 }
