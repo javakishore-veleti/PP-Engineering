@@ -128,6 +128,5 @@
 		<module>PP-Engg-Common-Service</module>
 		<module>PP-Engg-Common-Controller</module>
 		<module>PP-Engg-Common-Libs</module>
-		<module>PP-Engg-Common-PubSub</module>
 	</modules>
 </project>

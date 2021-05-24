@@ -24,13 +24,13 @@ public class AppGlobalProperties {
 	@Value("${pp.platform.microservices.security.enabled:false}")
 	public Boolean securityEnabledVal = Boolean.FALSE;
 
-	@Value("${pp.platform.streams.pubsub.crud.global.enabled: false}")
+	@Value("${pp.ta.pubsub.crud.global.enabled: false}")
 	public Boolean pubSubToipcsGlobalEnabled = Boolean.FALSE;
 
-	@Value("${pp.platform.streams.pubsub.crud.global.jsonfile: ''}")
+	@Value("${pp.ta.pubsub.crud.global.jsonfile: ''}")
 	public String pubSubToipcsGlobalJson;
 
-	@Value("${pp.platform.streams.pubsub.crud.global.jsonkey: ''}")
+	@Value("${pp.ta.pubsub.crud.global.jsonkey: ''}")
 	public String pubSubToipcsGlobalJsonKey;
 
 	public boolean isSecurityEnabled() {
