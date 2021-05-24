@@ -57,6 +57,16 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>jk.provider.portal.engineering.foundations</groupId>
+				<artifactId>PP-Engg-Common-Core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jk.provider.portal.engineering.foundations</groupId>
+				<artifactId>PP-Engg-Common-Domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter</artifactId>
 				<version>${spring.boot.version}</version>
@@ -118,5 +128,6 @@
 		<module>PP-Engg-Common-Service</module>
 		<module>PP-Engg-Common-Controller</module>
 		<module>PP-Engg-Common-Libs</module>
+		<module>PP-Engg-Common-PubSub</module>
 	</modules>
 </project>
