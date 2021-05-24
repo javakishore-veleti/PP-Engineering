@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubConfig;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubKey;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubMessage;
+import jk.pp.engg.foundations.common.core.pubsub.PubSubResult;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
+import jk.pp.engg.foundations.common.core.util.AppDBConstants;
 import jk.pp.engg.foundations.common.core.util.AppGlobalCtxAware;
+import jk.pp.engg.foundations.common.core.util.AppGlobalProperties;
 import jk.pp.engg.foundations.common.core.util.FileUtil;
 import jk.pp.engg.foundations.common.dao.core.AppCrudDAO;
 import jk.pp.engg.foundations.common.domain.core.BaseDomain;
@@ -29,19 +31,8 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 	@Autowired
 	private AppGlobalCtxAware ctxAware;
 
-	public static final Integer CRUD_BIT_CREATE = 1;
-	public static final Integer CRUD_BIT_UPDATE = 3;
-	public static final Integer CRUD_BIT_DELETE = 5;
-	public static final Integer CRUD_BIT_DELETE_ALL = 7;
-
-	@Value("${pp.platform.streams.pubsub.crud.global.enabled: false}")
-	private Boolean pubSubToipcsGlobalEnabled = Boolean.FALSE;
-
-	@Value("${pp.platform.streams.pubsub.crud.global.jsonfile: ''}")
-	private String pubSubToipcsGlobalJson;
-
-	@Value("${pp.platform.streams.pubsub.crud.global.jsonkey: ''}")
-	private String pubSubToipcsGlobalJsonKey;
+	@Autowired
+	private AppGlobalProperties globalProps;
 
 	protected Boolean enableCrudEventsToPubSub = Boolean.FALSE;
 	protected String pubSubToipcsConfigJson = null;
@@ -69,15 +60,16 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 	@PostConstruct
 	public void postContruct() throws Exception {
 
-		if (this.pubSubToipcsGlobalEnabled) {
+		if (this.globalProps.pubSubToipcsGlobalEnabled) {
 
 			this.enableCrudEventsToPubSub = Boolean.TRUE;
-			this.pubSubToipcsConfigJson = this.pubSubToipcsGlobalJson;
+			this.pubSubToipcsConfigJson = this.globalProps.pubSubToipcsGlobalJson;
 
-			if (this.pubSubToipcsGlobalJsonKey == null || this.pubSubToipcsGlobalJsonKey.trim().length() == 0) {
+			if (this.globalProps.pubSubToipcsGlobalJsonKey == null
+					|| this.globalProps.pubSubToipcsGlobalJsonKey.trim().length() == 0) {
 				this.pubSubConfigJsonKey = this.crudServiceImplRefId;
 			} else {
-				this.pubSubConfigJsonKey = this.pubSubToipcsGlobalJsonKey;
+				this.pubSubConfigJsonKey = this.globalProps.pubSubToipcsGlobalJsonKey;
 			}
 
 			this.initializePubSubConfigs();
@@ -109,7 +101,7 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		CrudResultDTO<T> result = this.crudDAO.create(crudDTO);
 		result.setDomainName(this.baseDomaniClassName);
 
-		this.checkPubSubAndPublish(CRUD_BIT_CREATE, result);
+		this.checkPubSubAndPublish(AppDBConstants.CRUD_BIT_CREATE, result);
 
 		return result;
 	}
@@ -119,7 +111,7 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		CrudResultDTO<T> result = this.crudDAO.update(crudDTO);
 		result.setDomainName(this.baseDomaniClassName);
 
-		this.checkPubSubAndPublish(CRUD_BIT_UPDATE, result);
+		this.checkPubSubAndPublish(AppDBConstants.CRUD_BIT_UPDATE, result);
 
 		return result;
 	}
@@ -129,7 +121,7 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		CrudResultDTO<T> result = this.crudDAO.deleteByPK(pk);
 		result.setDomainName(this.baseDomaniClassName);
 
-		this.checkPubSubAndPublish(CRUD_BIT_DELETE, result);
+		this.checkPubSubAndPublish(AppDBConstants.CRUD_BIT_DELETE, result);
 
 		return result;
 	}
@@ -193,7 +185,7 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		}
 
 		PubSubTopic pubSubTopic = null;
-		PubSubProducerService<PubSubKey, PubSubMessage> producerSvc = null;
+		PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> producerSvc = null;
 		String eventType = null;
 
 		switch (crudEvent) {
@@ -231,12 +223,14 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 			PubSubMessage value = new PubSubMessage();
 			value.setPk(resultDTO.getPk());
 
-			producerSvc.publishMessage(new Pair<PubSubKey, PubSubMessage>(key, value), pubSubTopic);
+			producerSvc.publishMessage(pubSubTopic.getTopic(), new Pair<PubSubKey, PubSubMessage>(key, value),
+					pubSubTopic, null);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private PubSubProducerService<PubSubKey, PubSubMessage> getPubSubProducerSvc(PubSubTopic pubSubTopic) {
+	private PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> getPubSubProducerSvc(
+			PubSubTopic pubSubTopic) {
 
 		if (pubSubTopic == null) {
 			return null;
