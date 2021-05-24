@@ -21,5 +21,10 @@
 			<groupId>jk.provider.portal.engineering.foundations</groupId>
 			<artifactId>PP-Engg-Common-Domain</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

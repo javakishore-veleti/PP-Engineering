@@ -8,4 +8,12 @@ public interface AppPubSubConsumer<KEY extends PubSubKey, MSG extends PubSubMess
 
 	RES consume(String topicName, KEY key, MSG message, PubSubCallBackHandler<KEY, MSG, RES> callBackHandler)
 			throws Exception;
+
+	default void stopConsumer(String topic) throws Exception {
+		return;
+	}
+
+	default void initializeConsumer(String topic) throws Exception {
+
+	}
 }
