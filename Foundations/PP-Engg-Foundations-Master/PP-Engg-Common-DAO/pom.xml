@@ -15,12 +15,10 @@
 		<dependency>
 			<groupId>jk.provider.portal.engineering.foundations</groupId>
 			<artifactId>PP-Engg-Common-Core</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jk.provider.portal.engineering.foundations</groupId>
 			<artifactId>PP-Engg-Common-Domain</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
