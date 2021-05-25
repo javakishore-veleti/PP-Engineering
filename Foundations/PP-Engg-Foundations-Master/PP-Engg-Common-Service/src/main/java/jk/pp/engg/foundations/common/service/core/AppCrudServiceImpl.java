@@ -3,6 +3,8 @@ package jk.pp.engg.foundations.common.service.core;
 import javax.annotation.PostConstruct;
 
 import org.javatuples.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,6 +32,8 @@ import lombok.Data;
 @Data
 public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends DomainCrudDTO<T>>
 		implements AppCrudService<T, DTO>, PubSubConsumerInitiator {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppCrudServiceImpl.class);
 
 	@Autowired
 	private AppGlobalCtxAware ctxAware;
@@ -67,12 +71,6 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	@PostConstruct
 	public void postContruct() throws Exception {
-
-		System.out.println("crudServiceImplRefId -> " + this.crudServiceImplRefId);
-		System.out.println("postContruct pubSubToipcsGlobalEnabled -> " + this.globalProps.pubSubToipcsGlobalEnabled);
-		System.out.println("postContruct pubSubToipcsGlobalJsonKey -> " + this.globalProps.pubSubToipcsGlobalJsonKey);
-		System.out.println("postContruct crudServiceImplRefId -> " + this.crudServiceImplRefId);
-
 		if (this.globalProps.pubSubToipcsGlobalEnabled) {
 
 			this.enableCrudEventsToPubSub = Boolean.TRUE;
@@ -88,13 +86,10 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 			this.initializePubSubConfigs();
 		}
 
-		System.out.println("pubSubToipcsGlobalConsumerEnabled " + this.globalProps.pubSubToipcsGlobalConsumerEnabled);
-
 		if (this.globalProps.pubSubToipcsGlobalConsumerEnabled) {
 			this.enableCrudEventsPubSubConsumer = Boolean.TRUE;
 		}
 
-		System.out.println("enableCrudEventsPubSubConsumer " + enableCrudEventsPubSubConsumer);
 		if (this.enableCrudEventsPubSubConsumer) {
 			this.globalObjs.registerPubSubConsumerInitHandler(this.crudServiceImplRefId, this);
 		}
@@ -102,11 +97,9 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	public void initializePubSubConfigs() throws Exception {
 
-		System.out.println("initializePubSubConfigs enableCrudEventsToPubSub -> " + this.enableCrudEventsToPubSub);
-
 		if (enableCrudEventsToPubSub == Boolean.FALSE && this.enableCrudEventsPubSubConsumer == Boolean.FALSE) {
 
-			System.out.println("initializePubSubConfigs Exiting so no messages will be published");
+			LOGGER.debug("Exit no messages will be published");
 			return;
 		}
 
@@ -208,8 +201,6 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	private void checkPubSubAndPublish(Integer crudEvent, CrudResultDTO<T> resultDTO) throws Exception {
 
-		System.out.println("enableCrudEventsToPubSub -> " + enableCrudEventsToPubSub);
-		System.out.println("this.pubSubConfig -> " + this.pubSubConfig);
 		if (enableCrudEventsToPubSub == Boolean.FALSE || this.pubSubConfig == null) {
 			return;
 		}
@@ -217,8 +208,6 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		PubSubTopic pubSubTopic = null;
 		PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> producerSvc = null;
 		String eventType = null;
-
-		System.out.println("crudEvent -> " + crudEvent);
 
 		switch (crudEvent) {
 		case 1:
@@ -245,8 +234,6 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 			break;
 		}
 
-		System.out.println("producerSvc -> " + producerSvc);
-
 		if (producerSvc != null) {
 
 			PubSubKey key = new PubSubKey();
@@ -256,6 +243,8 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 			PubSubMessage value = new PubSubMessage();
 			value.setPk(resultDTO.getPk());
+
+			LOGGER.debug("Publising the Message to the toipoc -> " + pubSubTopic.getTopic());
 
 			producerSvc.publishMessage(pubSubTopic.getTopic(), new Pair<PubSubKey, PubSubMessage>(key, value),
 					pubSubTopic, null);
@@ -275,11 +264,11 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 	@Override
 	public void initiatePubSubConsumers() throws Exception {
-		System.out.println("initiatePubSubConsumers Entered");
+		LOGGER.debug("Enter");
 
 		if (this.enableCrudEventsPubSubConsumer == Boolean.FALSE || this.pubSubConfig == null) {
 
-			System.out.println("initiatePubSubConsumers Exiting");
+			LOGGER.debug("Exit");
 
 			return;
 		}
@@ -290,11 +279,11 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 			PubSubConsumerService consumer = this.ctxAware.appCtx.getBean(pubSubTopic.getAdapterConsumerBeanId(),
 					PubSubConsumerService.class);
 
-			System.out.println("initiatePubSubConsumers Invoking consumer.consumeMessages(pubSubTopic)");
+			LOGGER.debug("Invoking consumer.consumeMessages(pubSubTopic)");
 			consumer.consumeMessages(pubSubTopic);
 		}
 
-		System.out.println("initiatePubSubConsumers Exiting from method");
+		LOGGER.debug("Exit");
 	}
 
 }
