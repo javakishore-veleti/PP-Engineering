@@ -9,24 +9,27 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jk.pp.engg.foundations.common.core.pubsub.PubSubConfig;
+import jk.pp.engg.foundations.common.core.pubsub.PubSubConsumerInitiator;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubKey;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubMessage;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubResult;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.engg.foundations.common.core.util.AppDBConstants;
 import jk.pp.engg.foundations.common.core.util.AppGlobalCtxAware;
+import jk.pp.engg.foundations.common.core.util.AppGlobalObjects;
 import jk.pp.engg.foundations.common.core.util.AppGlobalProperties;
 import jk.pp.engg.foundations.common.core.util.FileUtil;
 import jk.pp.engg.foundations.common.dao.core.AppCrudDAO;
 import jk.pp.engg.foundations.common.domain.core.BaseDomain;
 import jk.pp.engg.foundations.common.domain.core.CrudResultDTO;
 import jk.pp.engg.foundations.common.domain.core.DomainCrudDTO;
+import jk.pp.engg.foundations.common.service.core.pubsub.PubSubConsumerService;
 import jk.pp.engg.foundations.common.service.core.pubsub.PubSubProducerService;
 import lombok.Data;
 
 @Data
 public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends DomainCrudDTO<T>>
-		implements AppCrudService<T, DTO> {
+		implements AppCrudService<T, DTO>, PubSubConsumerInitiator {
 
 	@Autowired
 	private AppGlobalCtxAware ctxAware;
@@ -34,7 +37,12 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 	@Autowired
 	private AppGlobalProperties globalProps;
 
+	@Autowired
+	private AppGlobalObjects globalObjs;
+
 	protected Boolean enableCrudEventsToPubSub = Boolean.FALSE;
+	protected Boolean enableCrudEventsPubSubConsumer = Boolean.FALSE;
+
 	protected String pubSubToipcsConfigJson = null;
 	protected PubSubConfig pubSubConfig;
 	protected String pubSubConfigJsonKey;
@@ -79,13 +87,24 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 
 			this.initializePubSubConfigs();
 		}
+
+		System.out.println("pubSubToipcsGlobalConsumerEnabled " + this.globalProps.pubSubToipcsGlobalConsumerEnabled);
+
+		if (this.globalProps.pubSubToipcsGlobalConsumerEnabled) {
+			this.enableCrudEventsPubSubConsumer = Boolean.TRUE;
+		}
+
+		System.out.println("enableCrudEventsPubSubConsumer " + enableCrudEventsPubSubConsumer);
+		if (this.enableCrudEventsPubSubConsumer) {
+			this.globalObjs.registerPubSubConsumerInitHandler(this.crudServiceImplRefId, this);
+		}
 	}
 
 	public void initializePubSubConfigs() throws Exception {
 
 		System.out.println("initializePubSubConfigs enableCrudEventsToPubSub -> " + this.enableCrudEventsToPubSub);
 
-		if (enableCrudEventsToPubSub == Boolean.FALSE) {
+		if (enableCrudEventsToPubSub == Boolean.FALSE && this.enableCrudEventsPubSubConsumer == Boolean.FALSE) {
 
 			System.out.println("initializePubSubConfigs Exiting so no messages will be published");
 			return;
@@ -252,6 +271,30 @@ public abstract class AppCrudServiceImpl<T extends BaseDomain, DTO extends Domai
 		}
 
 		return this.ctxAware.appCtx.getBean(pubSubTopic.getAdapterProducerBeanId(), PubSubProducerService.class);
+	}
+
+	@Override
+	public void initiatePubSubConsumers() throws Exception {
+		System.out.println("initiatePubSubConsumers Entered");
+
+		if (this.enableCrudEventsPubSubConsumer == Boolean.FALSE || this.pubSubConfig == null) {
+
+			System.out.println("initiatePubSubConsumers Exiting");
+
+			return;
+		}
+
+		PubSubTopic pubSubTopic = this.pubSubConfig.getPubSubTopicForUsedWhen("MESSAGE-CONSUMER");
+		if (pubSubTopic != null) {
+			@SuppressWarnings("rawtypes")
+			PubSubConsumerService consumer = this.ctxAware.appCtx.getBean(pubSubTopic.getAdapterConsumerBeanId(),
+					PubSubConsumerService.class);
+
+			System.out.println("initiatePubSubConsumers Invoking consumer.consumeMessages(pubSubTopic)");
+			consumer.consumeMessages(pubSubTopic);
+		}
+
+		System.out.println("initiatePubSubConsumers Exiting from method");
 	}
 
 }

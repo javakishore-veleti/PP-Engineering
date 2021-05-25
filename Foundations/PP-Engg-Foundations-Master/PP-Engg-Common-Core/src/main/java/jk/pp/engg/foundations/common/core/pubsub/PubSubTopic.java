@@ -27,6 +27,9 @@ public class PubSubTopic {
 	private String adapterConsumerBeanId;
 	private String adapterProducerConfig;
 	private String adapterConsumerConfig;
+	private Integer consumerStartDelaySeconds = 15;
+	private Integer noofConsumers = 1;
+	private String consumerGroupId = "pp-consumer-group";
 
 	// CREATE, UPDATE, DELETE, DELETE_ALL, ALL
 	private String usedWhen;
@@ -35,8 +38,9 @@ public class PubSubTopic {
 	public String toString() {
 		return "PubSubTopic [name=" + name + ", topic=" + topic + ", adapterProducerBeanId=" + adapterProducerBeanId
 				+ ", adapterConsumerBeanId=" + adapterConsumerBeanId + ", adapterProducerConfig="
-				+ adapterProducerConfig + ", adapterConsumerConfig=" + adapterConsumerConfig + ", usedWhen=" + usedWhen
-				+ "]";
+				+ adapterProducerConfig + ", adapterConsumerConfig=" + adapterConsumerConfig
+				+ ", consumerStartDelaySeconds=" + consumerStartDelaySeconds + ", noofConsumers=" + noofConsumers
+				+ ", consumerGroupId=" + consumerGroupId + ", usedWhen=" + usedWhen + "]";
 	}
 
 }

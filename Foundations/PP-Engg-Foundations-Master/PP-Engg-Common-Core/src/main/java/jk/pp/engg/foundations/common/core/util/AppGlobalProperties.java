@@ -27,6 +27,12 @@ public class AppGlobalProperties {
 	@Value("${pp.ta.pubsub.crud.global.enabled: false}")
 	public Boolean pubSubToipcsGlobalEnabled = Boolean.FALSE;
 
+	@Value("${pp.ta.pubsub.crud.global.producer.enabled: false}")
+	public Boolean pubSubToipcsGlobalProducerEnabled = Boolean.FALSE;
+
+	@Value("${pp.ta.pubsub.crud.global.consumer.enabled: false}")
+	public Boolean pubSubToipcsGlobalConsumerEnabled = Boolean.FALSE;
+
 	@Value("${pp.ta.pubsub.crud.global.jsonfile: ''}")
 	public String pubSubToipcsGlobalJson;
 
